@@ -1,0 +1,1913 @@
+from tkinter import *
+from tkinter import messagebox
+from tkinter.font import Font
+import mysql.connector as sql
+from PIL import ImageTk,Image
+from tkcalendar import *
+from tkinter import ttk
+import random
+import smtplib
+from datetime import datetime
+import folium
+from tkintermapview import TkinterMapView
+#---------------------------------------------------------------
+----------
+#SQL connectivitydb=sql.connect(user='root',passwd='jdndndjdncbjd1124',database='
+rolexhouserentals')
+cursor=db.cursor()
+def database(userid,passwd):
+ try:
+ cursor.execute(''' insert into logindetails values
+ (%s,%s)''',(userid,passwd))
+ db.commit()
+ except:
+ return 0
+#---------------------------------------------------------------
+----------
+#OTP generationdef otp(address_info,email_body_info):
+ sender_email='rolexhouserentalss@gmail.com'
+ sender_password='yqojnxohecqfpsfl'
+ server=smtplib.SMTP('smtp.gmail.com',587)
+ server.starttls()
+ server.login(sender_email,sender_password)
+ server.sendmail(sender_email,address_info,email_body_info)
+ 
+#-------------------------------------------------------------
+#Main windowwindow=Tk()
+window.title('Rolex - House Rentals')
+w=500
+h=400
+sw=window.winfo_screenwidth()
+sh=window.winfo_screenheight()
+x=(sw/2)-(w/2)
+y=(sh/2)-(h/2)
+fontm=Font(family='Helvetica',size=16)
+window.geometry('%dx%d+%d+%d'%(w,h,x,y))
+window.config(bg='black')
+window.resizable(height='false',width='false')
+#-------------------------------------------------------------
+#Pre defined functionsdef space(name,var,r,c,wspace,b):
+ name=Label(var,text=wspace*' ',bg=b,borderwidth=0)
+ name.grid(row=r,column=c)
+ 
+def fontt(fname,style,size1):
+ fname=Font(family=style,size=int(size1))
+ return fname
+ 
+def combost(windowint):
+ 
+ frame1=Frame(windowint)
+ frame1.grid(row=3,column=2)
+ combostate=ttk.Combobox(frame1,width=30)
+ combostate.grid(row=3,column=2)
+ combostate.config(state='readonly')
+ cursor.execute(''' select * from state''')
+ row=cursor.fetchall()
+ for c in row:
+ 
+combostate['values']=tuple(list(combostate['values'])+[str(c[0])
+])
+ return combostate
+def cityst(windowint,s):
+ def combostateclick(event):
+ citystate['values']=''
+ data=s.get()
+ m=data+'city'
+ cursor.execute('select * from (%s)'%(m,))
+ row=cursor.fetchall()
+ for c in row:
+ 
+citystate['values']=tuple(list(citystate['values'])+[str(c[0])])
+ citystate.current(0)
+ 
+ frame2=Frame(windowint)
+ frame2.grid(row=4,column=2)
+ citystate=ttk.Combobox(frame2,width=30)
+ citystate.grid(row=4,column=2)
+ citystate.config(state='readonly')
+ s.bind('<<ComboboxSelected>>',combostateclick)
+ return citystate
+ 
+def prize(windowint2):
+ cb1=ttk.Combobox(windowint2,width=30)
+ cb1.grid(row=5,column=2)
+ cb1.config(state='readonly')
+ cursor.execute('select * from prizerange')
+ row2=cursor.fetchall()
+ for d in row2:
+ cb1['values']=tuple(list(cb1['values'])+[str(d[0])])
+ return cb1
+def map_troy(des1,des2):
+ des1.destroy()
+ des2.destroy()
+def tkinter_map_func(interface,lattitude,longitude):
+ 
+ lab=TkinterMapView(interface,width=1000,height=600)
+ lab.set_position(lattitude,longitude,marker=True)
+ lab.grid(row=0,column=0)
+ 
+back=Button(interface,image=newbackbtn,borderwidth=0,command=lam
+bda: map_troy(lab,back))
+ back.place(x=950,y=10)
+#---------------------------------------------------------------
+-----------------
+#imagesmypic=Image.open(r'C:\Users\vivek\Documents\rolex\rolexfinal.png
+')
+resized = mypic.resize((300,150))
+resized2=mypic.resize((160,100))
+newpicc=ImageTk.PhotoImage(resized2)
+newpic=ImageTk.PhotoImage(resized)
+loginicon=Image.open(r'C:\Users\vivek\Documents\rolex\loginicon.
+png')
+loginresize=loginicon.resize((50,50))
+newlogin=ImageTk.PhotoImage(loginresize)
+searchicon=Image.open(r'C:\Users\vivek\Documents\rolex\searchico
+n.jpg')
+searchiconresized=searchicon.resize((25,25))
+newsearchicon=ImageTk.PhotoImage(searchiconresized)
+logintexticon=Image.open(r'C:\Users\vivek\Documents\rolex\login.
+png')
+logintextresize=logintexticon.resize((200,200))
+#im=Image.open(r'C:\Users\user\Documents\python\login.png')
+newlogintext=ImageTk.PhotoImage(logintextresize)
+signtexticon=Image.open(r'C:\Users\vivek\Documents\rolex\signup.
+png')
+signtextresize=signtexticon.resize((200,200))
+newsigntext=ImageTk.PhotoImage(signtextresize)
+exittexticon=Image.open(r'C:\Users\vivek\Documents\rolex\Exit.pn
+g')
+exittextresize=exittexticon.resize((200,200))
+exitnew=ImageTk.PhotoImage(exittextresize)
+helptexticon=Image.open(r'C:\Users\vivek\Documents\rolex\help.jp
+eg')
+helptextresize=helptexticon.resize((230,170))
+helpnew=ImageTk.PhotoImage(helptextresize)
+subtexticon=Image.open(r'C:\Users\vivek\Documents\rolex\sub.png'
+)
+subtextresize=subtexticon.resize((200,200))
+subnew=ImageTk.PhotoImage(subtextresize)
+fortexticon=Image.open(r'C:\Users\vivek\Documents\rolex\forgot.p
+ng')
+fortextresize=fortexticon.resize((200,200))
+forgotnew=ImageTk.PhotoImage(fortextresize)
+backbtn=Image.open(r'C:\Users\vivek\Documents\rolex\back.png')
+backtextresize=backbtn.resize((25,25))
+newbackbtn=ImageTk.PhotoImage(backtextresize)
+apartment1=Image.open(r'C:\Users\vivek\Documents\rolex\apart1.jp
+g')
+apartmentresize=apartment1.resize((200,200))
+apart1=ImageTk.PhotoImage(apartmentresize)
+nextslide=Image.open(r'C:\Users\vivek\Documents\rolex\nxt.png')
+nextresize=nextslide.resize((25,25))
+nexts=ImageTk.PhotoImage(nextresize)
+prevslide=Image.open(r'C:\Users\vivek\Documents\rolex\prev.png')
+prevresize=prevslide.resize((25,25))
+prevs=ImageTk.PhotoImage(prevresize)
+bedslide=Image.open(r'C:\Users\vivek\Documents\rolex\bed1.jpg')
+bedresize=bedslide.resize((200,200))
+bed1=ImageTk.PhotoImage(bedresize)
+hallslide=Image.open(r'C:\Users\vivek\Documents\rolex\hall1.jpg'
+)
+hallresize=hallslide.resize((200,200))
+hall1=ImageTk.PhotoImage(hallresize)
+whitlabel=Image.open(r'C:\Users\vivek\Documents\rolex\whitelabel
+.png')
+whitlabelresize=whitlabel.resize((50,50))
+whitelabel=ImageTk.PhotoImage(whitlabelresize)
+rate_pic1=Image.open(r'C:\Users\vivek\Documents\rolex\ratingfina
+l.jpg')
+rate_picresize=rate_pic1.resize((100,25))
+rate_lab_fin=ImageTk.PhotoImage(rate_picresize)
+map_pic=Image.open(r'C:\Users\vivek\Documents\rolex\mapf.jpg')
+map_picresize=map_pic.resize((100,100))
+map_final=ImageTk.PhotoImage(map_picresize)
+reserve_pic=Image.open(r'C:\Users\vivek\Documents\rolex\reserve.
+png')
+reserve_picresize=reserve_pic.resize((200,50))
+reserve_final=ImageTk.PhotoImage(reserve_picresize)
+net1=Image.open(r'C:\Users\vivek\Documents\rolex\netbanking.png'
+)
+net2=net1.resize((200,120))
+net_final=ImageTk.PhotoImage(net2)
+amz1=Image.open(r'C:\Users\vivek\Documents\rolex\amazonpay.jpg')
+amz2=amz1.resize((200,120))
+amz_final=ImageTk.PhotoImage(amz2)
+cred1=Image.open(r'C:\Users\vivek\Documents\rolex\creditcard.png
+')
+cred2=cred1.resize((200,120))
+cred_final=ImageTk.PhotoImage(cred2)
+sbi=Image.open(r'C:\Users\vivek\Documents\rolex\sbi.jpg')
+sbi=sbi.resize((100,70))
+sbi=ImageTk.PhotoImage(sbi)
+axis=Image.open(r'C:\Users\vivek\Documents\rolex\axis.jpg')
+axis=axis.resize((100,70))
+axis=ImageTk.PhotoImage(axis)
+hdfc=Image.open(r'C:\Users\vivek\Documents\rolex\hdfcm.png')
+hdfc=hdfc.resize((100,70))
+hdfc=ImageTk.PhotoImage(hdfc)
+pnb=pnb=Image.open(r'C:\Users\vivek\Documents\rolex\pnbm.jpg')
+pnb=pnb.resize((100,70))
+pnb=ImageTk.PhotoImage(pnb)
+icici=Image.open(r'C:\Users\vivek\Documents\rolex\icici.png')
+icici=icici.resize((100,70))
+icici=ImageTk.PhotoImage(icici)
+# Functions for commands of the first interface
+book_val=[]
+maindic={}
+def frame_images(s12,size):
+ if size==200:
+ images=Image.open(s12)
+ images1=images.resize((200,200))
+ images2=ImageTk.PhotoImage(images1)
+ return images2
+ else:
+ images=Image.open(s12)
+ images1=images.resize((300,300))
+ images2=ImageTk.PhotoImage(images1)
+ return images2
+ 
+area1=[]
+area2=[]
+area3=[]
+area4=[]
+area5=[]
+def sql_process(city):
+ cursor.execute('select * from (%s)'%(city,))
+ areas=[]
+ for a in range(0,5):
+ areas.append(cursor.fetchone()[0])
+ global book_val,area1,area2,area3,area4,area5
+ book_val=areas
+ 
+ cursor.execute('select * from (%s)'%(book_val[0],))
+ area1=cursor.fetchall()
+ cursor.execute('select * from (%s)'%(book_val[1],))
+ area2=cursor.fetchall()
+ cursor.execute('select * from (%s)'%(book_val[2],))
+ area3=cursor.fetchall()
+ cursor.execute('select * from (%s)'%(book_val[3],))
+ area4=cursor.fetchall()
+ cursor.execute('select * from (%s)'%(book_val[4],))
+ area5=cursor.fetchall()
+ 
+def selecting_city(city):
+ sql_process(city)
+ global area1,area2,area3,area4,area5
+ 
+ #first row images-
+ 
+ image11_row1=area1[0][6]
+ image11_row1_final=frame_images(image11_row1,200)
+ image12_row1=area1[0][7]
+ image12_row1_final=frame_images(image12_row1,200)
+ image13_row1=area1[0][8]
+ image13_row1_final=frame_images(image13_row1,200)
+ image21_row1=area1[1][6]
+ image21_row1_final=frame_images(image21_row1,200)
+ image22_row1=area1[1][7]
+ image22_row1_final=frame_images(image22_row1,200)
+ image23_row1=area1[1][8]
+ image23_row1_final=frame_images(image23_row1,200)
+ image31_row1=area1[2][6]
+ image31_row1_final=frame_images(image31_row1,200)
+ image32_row1=area1[2][7]
+ image32_row1_final=frame_images(image32_row1,200)
+ image33_row1=area1[2][8]
+ image33_row1_final=frame_images(image33_row1,200)
+ image41_row1=area2[0][6]
+ image41_row1_final=frame_images(image41_row1,200)
+ image42_row1=area2[0][7]
+ image42_row1_final=frame_images(image42_row1,200)
+ image43_row1=area2[0][8]
+ image43_row1_final=frame_images(image43_row1,200)
+ image51_row1=area2[1][6]
+ image51_row1_final=frame_images(image51_row1,200)
+ image52_row1=area2[1][7]
+ image52_row1_final=frame_images(image52_row1,200)
+ image53_row1=area2[1][8]
+ image53_row1_final=frame_images(image53_row1,200)
+ #second row images-
+ image11_row2=area2[2][6]
+ image11_row2_final=frame_images(image11_row2,200)
+ image12_row2=area2[2][7]
+ image12_row2_final=frame_images(image12_row2,200)
+ image13_row2=area2[2][8]
+ image13_row2_final=frame_images(image13_row2,200)
+ 
+ image21_row2=area3[0][6]
+ image21_row2_final=frame_images(image21_row2,200)
+ 
+ image22_row2=area3[0][7]
+ image22_row2_final=frame_images(image22_row2,200)
+ image23_row2=area3[0][8]
+ image23_row2_final=frame_images(image23_row2,200)
+ 
+ image31_row2=area3[1][6]
+ image31_row2_final=frame_images(image31_row2,200)
+ image32_row2=area3[1][7]
+ image32_row2_final=frame_images(image32_row2,200)
+ image33_row2=area3[1][8]
+ image33_row2_final=frame_images(image33_row2,200)
+ 
+ image41_row2=area3[2][6]
+ image41_row2_final=frame_images(image41_row2,200)
+ image42_row2=area3[2][7]
+ image42_row2_final=frame_images(image42_row2,200)
+ image43_row2=area3[2][8]
+ image43_row2_final=frame_images(image43_row2,200)
+ 
+ image51_row2=area4[0][6]
+ image51_row2_final=frame_images(image51_row2,200)
+ image52_row2=area4[0][7]
+ image52_row2_final=frame_images(image52_row2,200)
+ image53_row2=area4[0][8]
+ image53_row2_final=frame_images(image53_row2,200)
+ 
+ #third row images-
+ image11_row3=area4[1][6]
+ image11_row3_final=frame_images(image11_row3,200)
+ image12_row3=area4[1][7]
+ image12_row3_final=frame_images(image12_row3,200)
+ image13_row3=area4[1][8]
+ image13_row3_final=frame_images(image13_row3,200)
+ 
+ image21_row3=area4[2][6]
+ image21_row3_final=frame_images(image21_row3,200)
+ image22_row3=area4[2][7]
+ image22_row3_final=frame_images(image22_row3,200)
+ image23_row3=area4[2][8]
+ image23_row3_final=frame_images(image23_row3,200)
+ 
+ image31_row3=area5[0][6]
+ image31_row3_final=frame_images(image31_row3,200)
+ image32_row3=area5[0][7]
+ image32_row3_final=frame_images(image32_row3,200)
+ image33_row3=area5[0][8]
+ image33_row3_final=frame_images(image33_row3,200)
+ 
+ image41_row3=area5[1][6]
+ image41_row3_final=frame_images(image41_row3,200)
+ image42_row3=area5[1][7]
+ image42_row3_final=frame_images(image42_row3,200)
+ image43_row3=area5[1][8]
+ image43_row3_final=frame_images(image43_row3,200)
+ 
+ image51_row3=area5[2][6]
+ image51_row3_final=frame_images(image51_row3,200)
+ image52_row3=area5[2][7]
+ image52_row3_final=frame_images(image52_row3,200)
+ image53_row3=area5[2][8]
+ image53_row3_final=frame_images(image53_row3,200)
+ global maindic
+ 
+maindic={0:image11_row1_final,1:image13_row1_final,2:image12_row
+1_final,3:image21_row1_final,4:image22_row1_final,5:image23_row1
+_final,6:image31_row1_final,7:image32_row1_final,
+ 
+8:image33_row1_final,9:image41_row1_final,10:image42_row1_final,
+11:image43_row1_final,12:image51_row1_final,13:image52_row1_fina
+l,14:image53_row1_final,15:image11_row2_final,
+ 
+16:image12_row2_final,17:image13_row2_final,18:image21_row2_fina
+l,19:image22_row2_final,20:image23_row2_final,21:image31_row2_fi
+nal,22:image32_row2_final,23:image33_row2_final,
+ 
+24:image41_row2_final,25:image42_row2_final,26:image43_row2_fina
+l,27:image51_row2_final,28:image52_row2_final,29:image53_row2_fi
+nal,30:image11_row3_final,31:image12_row3_final,
+ 
+32:image13_row3_final,33:image21_row3_final,34:image22_row3_fina
+l,35:image23_row3_final,36:image31_row3_final,37:image32_row3_fi
+nal,38:image33_row3_final,39:image41_row3_final,
+ 
+40:image42_row3_final,41:image43_row3_final,42:image51_row3_fina
+l,43:image52_row3_final,44:image53_row3_final}
+ 
+ 
+ 
+ 
+ 
+'''mainlst=[image11_row1_final,image13_row1_final,image12_row1_f
+inal,image21_row1_final,image22_row1_final,image23_row1_final,im
+age31_row1_final,image32_row1_final,
+ 
+image33_row1_final,image41_row1_final,image42_row1_final,image43
+_row1_final,image51_row1_final,image52_row1_final,image53_row1_f
+inal,image11_row2_final,
+ 
+image12_row2_final,image13_row2_final,image21_row2_final,image22
+_row2_final,image23_row2_final,image31_row2_final,image32_row2_f
+inal,image33_row2_final,
+ 
+image41_row2_final,image42_row2_final,image43_row2_final,image51
+_row2_final,image52_row2_final,image53_row2_final,image11_row3_f
+inal,image12_row3_final,
+ 
+image13_row3_final,image21_row3_final,image22_row3_final,image23
+_row3_final,image31_row3_final,image32_row3_final,image33_row3_f
+inal,image41_row3_final,
+ 
+image42_row3_final,image43_row3_final,image51_row3_final,image52
+_row3_final,image53_row3_final]'''
+def house_names_func(city,position):
+ #sql_process(city)
+ global house_names,area1,area2,area3,area4,area5
+ house_names=[area1[0][2],area1[1][2],area1[2][2],
+ area2[0][2],area2[1][2],area2[2][2],
+ area3[0][2],area3[1][2],area3[2][2],
+ area4[0][2],area4[1][2],area4[2][2],
+ area5[0][2],area5[1][2],area4[2][2]]
+ return house_names[position]
+ 
+def owner_names_func(city,position):
+ global area1,area2,area3,area4,area5,owner_names
+ owner_names=[area1[0][1],area1[1][1],area1[2][1],
+ area2[0][1],area2[1][1],area2[2][1],
+ area3[0][1],area3[1][1],area3[2][1],
+ area4[0][1],area4[1][1],area4[2][1],
+ area5[0][1],area5[1][1],area5[2][1]]
+ '''area3[0][1:3],area3[1][1:3],area3[2][1:3],
+ area4[0][1:3],area4[1][1:3],area4[2][1:3],
+ area5[0][1:3],area5[1][1:3],area5[2][1:3]]'''
+ return owner_names[position]
+def owner_mail_func(city,position):
+ global owner_mail_ids,area1,area2,area3,area4,area5
+ owner_mail_ids=[area1[0][5],area1[1][5],area1[2][5],
+ area2[0][5],area2[1][5],area2[2][5],
+ area3[0][5],area3[1][5],area3[2][5],
+ area4[0][5],area4[1][5],area4[2][5],
+ area5[0][5],area5[1][5],area5[2][5]]
+ 
+ return owner_mail_ids[position]
+def owner_num_func(city,position):
+ global owner_num,area1,area2,area3,area4,area5
+ owner_num=[area1[0][4],area1[1][4],area1[2][4],
+ area2[0][4],area2[1][4],area2[2][4],
+ area3[0][4],area3[1][4],area3[2][4],
+ area4[0][4],area4[1][4],area4[2][4],
+ area5[0][4],area5[1][4],area5[2][4]]
+ return owner_num[position]
+def owner_address_func(city,position):
+ global owner_address,area1,area2,area3,area4,area5
+ owner_address=[area1[0][3],area1[1][3],area1[2][3],
+ area2[0][3],area2[1][3],area2[2][3],
+ area3[0][3],area3[1][3],area3[2][3],
+ area4[0][3],area4[1][3],area4[2][3],
+ area5[0][3],area5[1][3],area5[2][3]]
+ return owner_address[position]
+def owner_lattitude_func(city,position):
+ global owner_lattitude,area1,area2,area3,area4,area5
+ owner_lattitude=[area1[0][9],area1[1][9],area1[2][9],
+ area2[0][9],area2[1][9],area2[2][9],
+ area3[0][9],area3[1][9],area3[2][9],
+ area4[0][9],area4[1][9],area4[2][9],
+ area5[0][9],area5[1][9],area5[2][9]]
+ return owner_lattitude[position]
+ 
+def owner_longitude_func(city,position):
+ global owner_longitude,area1,area2,area3,area4,area5
+ owner_longitude=[area1[0][10],area1[1][10],area1[2][10],
+ area2[0][10],area2[1][10],area2[2][10],
+ area3[0][10],area3[1][10],area3[2][10],
+ area4[0][10],area4[1][10],area4[2][10],
+ area5[0][10],area5[1][10],area5[2][10]]
+ return owner_longitude[position] 
+ 
+def terms():
+ messagebox.askquestion('Terms and conditions','Rolex - House 
+Rentals\nThis is an application in which you can book 
+hotels,rent a house etc., NEED HELP?')
+ 
+def printing_space(x,y,interface):
+ space_lab=Label(interface,text=' ',bg='white')
+ space_lab.grid(row=x,column=y)
+ 
+user=''
+def maintab():
+ def maininterface():
+ def pay():
+ def interior():
+ def 
+insider(im,keyval,bookval,owner_val,city_val):
+ def final_pay_int(amount):
+ def amazon_pay_func(amount):
+ def min_fin(mail,amount):
+ def ffgcheck():
+ if otpent.get()==str(bbb):
+ 
+messagebox.showinfo('Note','House Reserved! Thank you for using 
+ROLEX HOUSE RENTALS')
+ window.destroy()
+ else:
+ 
+messagebox.showerror('Note','Check Your Otp')
+ otpent.delete(0,END)
+ 
+ 
+ #email='Your OTP for 
+transaction of Rupees '+str(amount)+' is : '+str(bbb)
+ otp(mail,str(bbb))
+ messagebox.showinfo('Note','OTP 
+has been sent to your mail id')
+ final_pay.wm_state('iconic')
+final_otp=Toplevel(window)
+final_otp.geometry('%dx%d+%d+%d'%(500,300,x,y))
+ final_otp.config(bg='black')
+ 
+ 
+ 
+txtt33=Label(final_otp,text='Enter OTP 
+:',font=fontm,bg='black',fg='white',pady=10)
+ txtt33.pack()
+ 
+ 
+otpent=Entry(final_otp,width=30,show='*')
+ otpent.pack()
+ 
+ 
+subbn1=Button(final_otp,image=subnew,font=fontm,bg='black',borde
+rwidth=0,height=60,width=130,command=ffgcheck)
+ subbn1.pack(pady=10)
+ 
+backb3=Button(final_otp,image=newbackbtn,borderwidth=0,bg='black
+')
+ backb3.pack()
+ bbb=random.randrange(1000,9999)
+ fpayint.wm_state('iconic')
+ final_pay=Toplevel(window)
+ w=730
+ h=300
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ 
+final_pay.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ final_pay.config(bg='black')
+ 
+ finallab12=Label(final_pay,text=' 
+',borderwidth=0,bg='black')
+ 
+finallab12.grid(row=0,column=0,pady=10)
+ 
+finallab1=Label(final_pay,image=amz_final,borderwidth=0,bg='blac
+k')
+ 
+finallab1.grid(row=0,column=1,pady=10)
+ 
+finallab2=Label(final_pay,text='Enter your username : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab2.grid(row=1,column=0)
+ txtfin1=Entry(final_pay,width=30)
+ txtfin1.grid(row=1,column=1)
+ 
+finallab3=Label(final_pay,text='Enter your password : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab3.grid(row=2,column=0)
+ 
+txtfin2=Entry(final_pay,width=30,show='*')
+ txtfin2.grid(row=2,column=1)
+ 
+finallab4=Label(final_pay,text='Enter your mail id : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab4.grid(row=3,column=0)
+ txtfin5=Entry(final_pay,width=30)
+ txtfin5.grid(row=3,column=1)
+ 
+finallab5=Label(final_pay,text='Amount payable : 
+'+str(amount)+'/-
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab5.grid(row=4,column=0)
+ 
+ 
+subbtn1=Button(final_pay,image=subnew,font=fontm,bg='black',bord
+erwidth=0,height=60,width=130,command=lambda: 
+min_fin(txtfin5.get(),amount))
+ subbtn1.grid(row=4,column=1)
+ 
+ def net_bank_func(amount):
+ def final_pay_page(bank,amount):
+ def min_fin(mail,amount):
+ def ffgcheck():
+ if 
+otpent.get()==str(bbb):
+ 
+messagebox.showinfo('Note','House Reserved! Thank you for using 
+ROLEX HOUSE RENTALS')
+ window.destroy()
+ else:
+ 
+messagebox.showerror('Note','Check Your Otp')
+ otpent.delete(0,END)
+ 
+ 
+ #email='Your OTP for 
+transaction of Rupees '+str(amount)+' is : '+str(bbb)
+ otp(mail,str(bbb))
+ 
+messagebox.showinfo('Note','OTP has been sent to your mail id')
+ final_pay.wm_state('iconic')
+ final_otp=Toplevel(window)
+final_otp.geometry('%dx%d+%d+%d'%(500,300,x,y))
+ final_otp.config(bg='black')
+ 
+ 
+txtt33=Label(final_otp,text='Enter OTP 
+:',font=fontm,bg='black',fg='white',pady=10)
+ txtt33.pack()
+ 
+ 
+otpent=Entry(final_otp,width=30,show='*')
+ otpent.pack()
+ 
+ 
+subbn1=Button(final_otp,image=subnew,font=fontm,bg='black',borde
+rwidth=0,height=60,width=130,command=ffgcheck)
+ subbn1.pack(pady=10)
+ 
+backb3=Button(final_otp,image=newbackbtn,borderwidth=0,bg='black
+')
+ backb3.pack()
+ 
+ 
+ 
+ bbb=random.randrange(1000,9999)
+netpayint.wm_state('iconic')
+final_pay=Toplevel(window)
+w=730
+h=300
+x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ 
+final_pay.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ final_pay.config(bg='black')
+finallab12=Label(final_pay,text=' 
+',borderwidth=0,bg='black')
+ 
+finallab12.grid(row=0,column=0,pady=10)
+ 
+finallab1=Label(final_pay,image=bank,borderwidth=0,bg='black')
+ 
+finallab1.grid(row=0,column=1,pady=10)
+ 
+finallab2=Label(final_pay,text='Enter your username : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab2.grid(row=1,column=0)
+ 
+txtfin1=Entry(final_pay,width=30)
+ txtfin1.grid(row=1,column=1)
+ 
+finallab3=Label(final_pay,text='Enter your password : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab3.grid(row=2,column=0)
+ 
+txtfin2=Entry(final_pay,width=30,show='*')
+ txtfin2.grid(row=2,column=1)
+ 
+finallab4=Label(final_pay,text='Enter your mail id : 
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab4.grid(row=3,column=0)
+ 
+txtfin5=Entry(final_pay,width=30)
+ txtfin5.grid(row=3,column=1)
+ 
+finallab5=Label(final_pay,text='Amount payable : 
+'+str(amount)+'/-
+',bg='black',fg='white',font=Font(family='Century 
+Gothic',size=18))
+ finallab5.grid(row=4,column=0)
+ 
+subbtn1=Button(final_pay,image=subnew,font=fontm,bg='black',bord
+erwidth=0,height=60,width=130,command=lambda: 
+min_fin(txtfin5.get(),amount))
+ subbtn1.grid(row=4,column=1)
+ 
+ 
+ fpayint.wm_state('iconic')
+ netpayint=Toplevel(window)
+ w=700
+ h=500
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ 
+netpayint.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ netpayint.config(bg='white')
+ nlab1=Label(netpayint,text='SELECT 
+YOUR BANK',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=20))
+ nlab1.pack(pady=5)
+ 
+nbut1=Button(netpayint,image=sbi,borderwidth=0,bg='white',comman
+d=lambda: final_pay_page(sbi,amount))
+ nbut1.pack(pady=5)
+ 
+ 
+nbut2=Button(netpayint,image=axis,borderwidth=0,bg='white')
+ nbut2.pack(pady=5)
+ 
+ 
+nbut3=Button(netpayint,image=icici,borderwidth=0,bg='white')
+ nbut3.pack(pady=5)
+ 
+ 
+nbut4=Button(netpayint,image=hdfc,borderwidth=0,bg='white')
+ nbut4.pack(pady=5)
+ 
+ 
+nbut5=Button(netpayint,image=pnb,borderwidth=0,bg='white')
+ nbut5.pack(pady=5)
+ 
+ 
+ 
+ '''def amazon_pay_func(amount):
+ def credit_card_func(amont):'''
+ insint.wm_state('iconic')
+ fpayint=Toplevel(window)
+ w=900
+ h=500
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ 
+fpayint.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ fpayint.config(bg='white')
+ flab1=Label(fpayint,text='CHOOSE YOUR 
+CONVINIENT PAYMENT 
+METHOD',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=20))
+ flab1.pack()
+ 
+fbut1=Button(fpayint,image=net_final,borderwidth=0,bg='white',co
+mmand=lambda: net_bank_func(amount))
+ fbut1.pack(pady=5)
+ 
+fbut2=Button(fpayint,image=amz_final,borderwidth=0,bg='white',co
+mmand=lambda: amazon_pay_func(amount))
+ fbut2.pack(pady=5)
+ 
+fbut3=Button(fpayint,image=cred_final,borderwidth=0,bg='white')#
+,command=lambda: credit_card_func(amount))
+ fbut3.pack(pady=5)
+ 
+ def prevpic_fun_insider():
+ dic2[im]-=1
+ if dic2[im]<1:
+ dic2[im]=3
+ elif dic2[im]>3:
+ dic2[im]=1
+ if dic2[im]==1:
+ 
+pic1=Button(insint,image=maindic[keyval],bg='white',borderwidth=
+0)
+ pic1.grid(row=1,column=1)
+ elif dic2[im]==2:
+ 
+pic1=Button(insint,image=maindic[keyval+1],bg='white',borderwidt
+h=0)
+ pic1.grid(row=1,column=1)
+ else:
+ 
+pic1=Button(insint,image=maindic[keyval+2],bg='white',borderwidt
+h=0)
+ pic1.grid(row=1,column=1)
+ 
+newnumcount=Label(insint,text=str(dic2[im])+'/'+str(num2),fg='bl
+ack')
+ newnumcount.place(x=120,y=225)
+ 
+ 
+ def nxtpic_fun_insider():
+ dic2[im]+=1
+ if dic2[im]>3:
+ dic2[im]=1
+ if dic2[im]==1:
+ 
+pic1=Button(insint,image=maindic[keyval],bg='white',borderwidth=
+0)
+ pic1.grid(row=1,column=1)
+ elif dic2[im]==2:
+ 
+pic1=Button(insint,image=maindic[keyval+1],bg='white',borderwidt
+h=0)
+ pic1.grid(row=1,column=1)
+ else:
+ 
+pic1=Button(insint,image=maindic[keyval+2],bg='white',borderwidt
+h=0)
+ pic1.grid(row=1,column=1)
+ 
+newnumcount=Label(insint,text=str(dic2[im])+'/'+str(num2),fg='bl
+ack')
+ newnumcount.place(x=120,y=225)
+ 
+ 
+ payint.wm_state('iconic')
+ insint=Toplevel(window)
+ w=1000
+ h=600
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ insint.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ insint.config(bg='white')
+ 
+space_lab=Label(insint,text='',bg='white',height=3,width=3)
+ space_lab.grid(row=0,column=0)
+ 
+ 
+prevpic=Button(insint,image=prevs,bg='white',borderwidth=0,comma
+nd=prevpic_fun_insider)
+ prevpic.grid(row=1,column=0)
+ 
+pic1=Label(insint,image=maindic[keyval],bg='white',borderwidth=0
+)
+ pic1.grid(row=1,column=1)
+ 
+numcount=Label(insint,text=str(dic2[im])+'/'+str(num2),fg='black
+')
+ numcount.place(x=120,y=225)
+ 
+nextpic1=Button(insint,image=nexts,bg='white',borderwidth=0,comm
+and=nxtpic_fun_insider)
+ nextpic1.grid(row=1,column=2)
+ 
+ printing_space(1,3,insint)
+ 
+newlab=Label(insint,text=str(house_names_func(city,city_val).tit
+le()),bg='white',fg='black',font=Font(family='Century 
+Gothic',size=18))
+ newlab.place(x=270,y=45)
+ 
+ 
+owname=Label(insint,text=str(owner_names_func(city,owner_val).ti
+tle())+"'s"+' '+house_names_func(city,city_val).title()+' '+'is 
+located at ganapathy street, 
+',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=12))
+ owname.place(x=270,y=80)
+ descip1=Label(insint,text='perambur. It is a 
+3b2hk house as it has 3 bedrooms, 2 halls and a 
+kitchen.',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=12))
+ descip1.place(x=270,y=110)
+ descip2=Label(insint,text='According to the 
+host'+' '+house_names_func(city,city_val).title()+' '+'is best 
+suitable for families 
+with',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=12))
+ descip2.place(x=270,y=140)
+ descip3=Label(insint,text='maximum 8 
+members.',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=12))
+ descip3.place(x=270,y=170)
+ descip4=Label(insint,text='Features: Fully 
+air conditioned, Amazing lake view from the 
+balcony,',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=10))
+ descip4.place(x=270,y=205)
+ descip5=Label(insint,text='pre-constructed 
+furnitures, television, Wi-Fi and more! contact host for further 
+details',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=10))
+ descip5.place(x=270,y=230)
+ 
+pricetag=Label(insint,text=str(int(members)*int(prize)*int(stay_
+date))+' '+'/-',bg='white',fg='black',font=Font(family='Century 
+Gothic',size=16))
+ pricetag.place(x=40,y=260)
+ memtag=Label(insint,text='('+str(members)+' 
+'+'member(s)'+'/'+str(stay_date)+' 
+'+'night(s))',fg='black',bg='white',font=Font(family='Century 
+Gothic',size=8))
+ memtag.place(x=110,y=267)
+ 
+rate_label=Label(insint,image=rate_lab_fin,bg='white',borderwidt
+h=0)
+ rate_label.place(x=80,y=290)
+ ow_det=Label(insint,text='Host name :'+' 
+'+owner_names_func(city,owner_val).title(),fg='black',bg='white'
+,font=Font(family='Century Gothic',size=12))
+ ow_det.place(x=270,y=260)
+ ow_det2=Label(insint,text='Host mail id :'+' 
+'+owner_mail_func(city,owner_val),fg='black',bg='white',font=Fon
+t(family='Century Gothic',size=12))
+ ow_det2.place(x=270,y=290)
+ 
+ ow_det3=Label(insint,text='Host mobile :'+' 
+'+owner_num_func(city,owner_val),fg='black',bg='white',font=Font
+(family='Century Gothic',size=12))
+ ow_det3.place(x=270,y=320)
+ ow_det4=Label(insint,text='House Address 
+:'+' 
+'+owner_address_func(city,owner_val),fg='black',bg='white',font=
+Font(family='Century Gothic',size=12))
+ ow_det4.place(x=270,y=350)
+ 
+map_label=Button(insint,image=map_final,bg='white',borderwidth=0
+,command=lambda: 
+tkinter_map_func(insint,owner_lattitude_func(city,owner_val),own
+er_longitude_func(city,owner_val)))
+ 
+ map_label.place(x=270,y=380)
+ map_txt=Button(insint,text='Tap to view 
+location',borderwidth=0,bg='white',command=lambda: 
+tkinter_map_func(insint,owner_lattitude_func(city,owner_val),own
+er_longitude_func(city,owner_val)))
+ 
+ map_txt.place(x=375,y=420)
+ 
+reserve_but=Button(insint,image=reserve_final,borderwidth=0,bg='
+white',command=lambda: 
+final_pay_int(str(int(members)*int(prize)*int(stay_date))))
+ reserve_but.place(x=415,y=500)
+ 
+ 
+ #text='According to the host'+' 
+'+house_names_func(city,city_val).title())+' '+'is best suitable 
+for'
+ 
+ 
+ def 
+nxtpic(rr,rc,im,keyval,piccolumn,numcountlabelx,numcountlabely):
+ #global dicc[im]
+ dic[im]+=1
+ if dic[im]>3:
+ dic[im]=1
+ if dic[im]==1:
+ 
+pic1=Button(payint,image=maindic[keyval],bg='white',borderwidth=
+0)
+ pic1.grid(row=rr,column=piccolumn)
+ elif dic[im]==2:
+ 
+pic1=Button(payint,image=maindic[keyval+1],bg='white',borderwidt
+h=0)
+ pic1.grid(row=rr,column=piccolumn)
+ else:
+ 
+pic1=Button(payint,image=maindic[keyval+2],bg='white',borderwidt
+h=0)
+ pic1.grid(row=rr,column=piccolumn)
+ 
+ 
+newnumcount=Label(payint,text=str(dic[im])+'/'+str(num2),fg='bla
+ck')
+ 
+newnumcount.place(x=numcountlabelx,y=numcountlabely)
+ def 
+prevpic_fun(rr,rc,im,keyval,piccolumn,numcountlabelx,numcountlab
+ely):
+ #global dic[im]
+ dic[im]-=1
+ if dic[im]<1:
+ dic[im]=3
+ elif dic[im]>3:
+ dic[im]=1
+ if dic[im]==1:
+ 
+pic1=Button(payint,image=maindic[keyval],bg='white',borderwidth=
+0)
+ pic1.grid(row=rr,column=piccolumn)
+ elif dic[im]==2:
+ 
+pic1=Button(payint,image=maindic[keyval+1],bg='white',borderwidt
+h=0)
+ pic1.grid(row=rr,column=piccolumn)
+ else:
+ 
+pic1=Button(payint,image=maindic[keyval+2],bg='white',borderwidt
+h=0)
+ pic1.grid(row=rr,column=piccolumn)
+ 
+ 
+newnumcount1=Label(payint,text=str(dic[im])+'/'+str(num2),fg='bl
+ack')
+ 
+newnumcount1.place(x=numcountlabelx,y=numcountlabely)
+ 
+ def nxt_lit(x,y,z,keyval,piccol,numx,numy):
+ 
+nextpic1=Button(payint,image=nexts,bg='white',borderwidth=0,comm
+and=lambda: nxtpic(x,y,z,keyval,piccol,numx,numy))
+ nextpic1.grid(row=x,column=y)
+ def prev_lit(x,y,z,keyval,piccol,numx,numy):
+ 
+prevpic=Button(payint,image=prevs,bg='white',borderwidth=0,comma
+nd=lambda: prevpic_fun(x,y,z,keyval,piccol,numx,numy))
+ prevpic.grid(row=x,column=y)
+ 
+ 
+ currentnum=1
+ mainint.wm_state('iconic')
+ payint=Toplevel(window)
+ w=1920
+ h=1080
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ payint.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ payint.config(bg='white')
+ 
+space_lab=Label(payint,text='',bg='white',height=3,width=3)
+ space_lab.grid(row=0,column=0)
+ 
+search_resultlabel=Label(payint,text=show_result,pady=10,font=Fo
+nt(family='Century Gothic',size=16),bg='white',fg='black')
+ search_resultlabel.place(x=0,y=0)
+ 
+ prev_lit(1,0,11,0,1,120,230)
+ 
+pic1=Button(payint,image=maindic[0],bg='white',borderwidth=0,com
+mand=lambda: insider(11,0,0,0,0))
+ pic1.grid(row=1,column=1)
+ 
+numcount=Label(payint,text=str(dic[11])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=120,y=230)
+ nxt_lit(1,2,11,0,1,120,230)
+ printing_space(1,3,payint)
+ 
+ prev_lit(1,4,12,3,5,420,230)
+ 
+pic2=Button(payint,image=maindic[3],bg='white',borderwidth=0)
+ pic2.grid(row=1,column=5)
+ 
+numcount=Label(payint,text=str(dic[12])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=420,y=230)
+ nxt_lit(1,6,12,3,5,420,230)
+ printing_space(1,7,payint)
+ prev_lit(1,8,13,6,9,725,230)
+ 
+pic2=Button(payint,image=maindic[6],bg='white',borderwidth=0)
+ pic2.grid(row=1,column=9)
+ 
+numcount=Label(payint,text=str(dic[13])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=725,y=230)
+ nxt_lit(1,10,13,6,9,725,230)
+ 
+ printing_space(1,11,payint)
+ prev_lit(1,12,14,9,13,1030,230)
+ 
+pic2=Button(payint,image=maindic[9],bg='white',borderwidth=0)
+ pic2.grid(row=1,column=13)
+ 
+numcount=Label(payint,text=str(dic[14])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1030,y=230)
+ nxt_lit(1,14,14,9,13,1030,230)
+ printing_space(1,15,payint)
+ prev_lit(1,16,15,12,17,1330,230)
+ 
+pic2=Button(payint,image=maindic[12],bg='white',borderwidth=0)
+ pic2.grid(row=1,column=17)
+ 
+numcount=Label(payint,text=str(dic[15])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1330,y=230)
+ nxt_lit(1,18,15,12,17,1330,230)
+ printing_space(1,19,payint)
+ prev_lit(1,20,21,15,21,1640,230)
+ 
+pic2=Button(payint,image=maindic[15],bg='white',borderwidth=0)
+ pic2.grid(row=1,column=21)
+ 
+numcount=Label(payint,text=str(dic[21])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1640,y=230)
+ nxt_lit(1,22,21,15,21,1640,230)
+ #------
+ 
+space_lab_bel=Label(payint,text='',bg='white',height=8,width=3)
+ space_lab_bel.grid(row=2,column=0)
+ prev_lit(3,0,22,18,1,120,555)
+ 
+pic1=Button(payint,image=maindic[18],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=1)
+ 
+numcount=Label(payint,text=str(dic[22])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=120,y=555)
+ nxt_lit(3,2,22,18,1,120,555)
+ printing_space(3,3,payint)
+ 
+ prev_lit(3,4,23,21,5,420,555)
+ 
+pic1=Button(payint,image=maindic[21],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=5)
+ 
+numcount=Label(payint,text=str(dic[23])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=420,y=555)
+ nxt_lit(3,6,23,21,5,420,555)
+ 
+ printing_space(3,7,payint)
+ prev_lit(3,8,24,24,9,725,555)
+ 
+pic1=Button(payint,image=maindic[24],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=9)
+ 
+numcount=Label(payint,text=str(dic[24])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=725,y=555)
+ nxt_lit(3,10,24,24,9,725,555)
+ printing_space(3,11,payint)
+ prev_lit(3,12,25,27,13,1030,555)
+ 
+pic1=Button(payint,image=maindic[27],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=13)
+ 
+numcount=Label(payint,text=str(dic[25])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1030,y=555)
+ nxt_lit(3,14,25,27,13,1030,555)
+ printing_space(3,15,payint)
+ prev_lit(3,16,31,30,17,1330,555)
+ 
+pic1=Button(payint,image=maindic[30],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=17)
+ 
+numcount=Label(payint,text=str(dic[31])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1330,y=555)
+ nxt_lit(3,18,31,30,17,1330,555)
+ printing_space(3,19,payint)
+ prev_lit(3,20,32,33,21,1640,555)
+ 
+pic1=Button(payint,image=maindic[33],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=21)
+ 
+numcount=Label(payint,text=str(dic[32])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=1640,y=555)
+ nxt_lit(3,22,31,33,21,1640,555)
+ #-----------
+ 
+ 
+space_lab_bel2=Label(payint,text='',bg='white',height=8,width=3)
+ space_lab_bel2.grid(row=4,column=0)
+ prev_lit(5,0,32,36,1,120,883)
+ 
+pic1=Button(payint,image=maindic[36],bg='white',borderwidth=0)
+ pic1.grid(row=5,column=1)
+ 
+numcount=Label(payint,text=str(dic[32])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=120,y=883)
+ nxt_lit(5,2,32,36,1,120,883)
+ printing_space(5,3,payint)
+ prev_lit(5,4,33,39,5,420,883)
+ 
+pic1=Button(payint,image=maindic[39],bg='white',borderwidth=0)
+ pic1.grid(row=5,column=5)
+ 
+numcount=Label(payint,text=str(dic[33])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=420,y=883)
+ nxt_lit(5,6,33,39,5,420,883)
+ 
+ 
+ printing_space(5,7,payint)
+ prev_lit(5,8,34,42,9,725,883)
+ 
+pic1=Button(payint,image=maindic[42],bg='white',borderwidth=0)
+ pic1.grid(row=5,column=9)
+ 
+numcount=Label(payint,text=str(dic[34])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=725,y=883)
+ nxt_lit(5,10,34,42,9,725,883)
+ 
+ 
+ 
+ 
+ '''prev_lit(3,8,24,24,9,725,555)
+ 
+pic1=Button(payint,image=maindic[24],bg='white',borderwidth=0)
+ pic1.grid(row=3,column=9)
+ 
+numcount=Label(payint,text=str(dic[24])+'/'+str(num2),fg='black'
+)
+ numcount.place(x=725,y=555)
+ nxt_lit(3,10,24,24,9,725,555)'''
+ 
+ 
+ 
+#rr,rc,im,keyval,piccolumn,numcountlabelx,numcountlabely
+ #-----------------------------------------------
+----------------------
+ 
+housenamelabel1=Label(payint,text=str(house_names_func(city,0).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel1.place(x=50,y=260)
+ 
+areanamelabel1=Label(payint,text=book_val[0].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel1.place(x=50,y=280)
+ 
+housenamelabel2=Label(payint,text=str(house_names_func(city,1).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel2.place(x=360,y=260)
+ 
+areanamelabel2=Label(payint,text=book_val[0].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel2.place(x=360,y=280)
+ 
+housenamelabel3=Label(payint,text=str(house_names_func(city,2).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel3.place(x=660,y=260)
+ 
+areanamelabel3=Label(payint,text=book_val[0].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel3.place(x=660,y=280)
+ 
+housenamelabel4=Label(payint,text=str(house_names_func(city,3).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel4.place(x=970,y=260)
+ 
+areanamelabel4=Label(payint,text=book_val[1].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel4.place(x=970,y=280)
+ 
+housenamelabel5=Label(payint,text=str(house_names_func(city,4).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel5.place(x=1270,y=260)
+ 
+areanamelabel5=Label(payint,text=book_val[1].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel5.place(x=1270,y=280)
+ 
+housenamelabel6=Label(payint,text=str(house_names_func(city,5).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel6.place(x=1580,y=260)
+ 
+areanamelabel6=Label(payint,text=book_val[1].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel6.place(x=1580,y=280)
+ #------
+ 
+housenamelabel7=Label(payint,text=str(house_names_func(city,6).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel7.place(x=50,y=592)
+ 
+areanamelabel7=Label(payint,text=book_val[2].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel7.place(x=50,y=612)
+ 
+housenamelabel8=Label(payint,text=str(house_names_func(city,7).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel8.place(x=360,y=592)
+ 
+areanamelabel8=Label(payint,text=book_val[2].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel8.place(x=360,y=612)
+ 
+housenamelabel9=Label(payint,text=str(house_names_func(city,8).t
+itle()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel9.place(x=660,y=592)
+ 
+areanamelabel9=Label(payint,text=book_val[2].title(),fg='black',
+bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel9.place(x=660,y=612)
+ 
+housenamelabel10=Label(payint,text=str(house_names_func(city,9).
+title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel10.place(x=970,y=592)
+ 
+areanamelabel10=Label(payint,text=book_val[3].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel10.place(x=970,y=612)
+ 
+housenamelabel11=Label(payint,text=str(house_names_func(city,10)
+.title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel11.place(x=1270,y=592)
+ 
+areanamelabel11=Label(payint,text=book_val[3].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel11.place(x=1270,y=612)
+ 
+housenamelabel12=Label(payint,text=str(house_names_func(city,11)
+.title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel12.place(x=1580,y=592)
+ 
+areanamelabel12=Label(payint,text=book_val[3].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel12.place(x=1580,y=612)
+ #--------
+ 
+housenamelabel13=Label(payint,text=str(house_names_func(city,12)
+.title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel13.place(x=50,y=920)
+ 
+areanamelabel13=Label(payint,text=book_val[4].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel13.place(x=50,y=940)
+ 
+housenamelabel14=Label(payint,text=str(house_names_func(city,13)
+.title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel14.place(x=360,y=920)
+ 
+areanamelabel14=Label(payint,text=book_val[4].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel14.place(x=360,y=940)
+ 
+housenamelabel15=Label(payint,text=str(house_names_func(city,14)
+.title()),fg='black',bg='white',font=Font(family='Century 
+Gothic',size=10))
+ housenamelabel15.place(x=660,y=920)
+ 
+areanamelabel15=Label(payint,text=book_val[4].title(),fg='black'
+,bg='white',font=Font(family='Century Gothic',size=10))
+ areanamelabel15.place(x=660,y=940)
+ 
+ 
+ 
+ 
+ ind=int(indate.get()[0:2])
+ ind2=int(outdate.get()[0:2])
+ b=str(datetime.now().date())
+ b=b[8:]
+ b=int(b)
+ ac=False
+ bc=False
+ '''if ind>b and ind2>ind and ind2-ind<=5:
+ ac=True
+ bc=True'''
+ if ind<b:
+ window.wm_state('iconic')
+ messagebox.showerror('Note','Choose a wise check 
+in date')
+ elif ind2<ind:
+ messagebox.showerror('Note','Choose a wise check 
+out date')
+ 
+ elif ind2-ind>5:
+ window.wm_state('iconic')
+ messagebox.showerror('Note','Check out date can 
+only be of 5 days from check in date')
+ else:
+ ac=True
+ bc=True
+ stay_date=ind2-ind
+ state=a.get()
+ city=b3.get()
+ members=memberent.get()
+ prize=c3.get()
+ daterange=ind2-ind
+ #location=state,city,members,prize,daterange
+ selecting_city(city)
+ show_result='Showing results for -
+'+state.title()+'/'+city.title()
+ #nextrc=[0,1,0,3]
+ #picrc=[0,2]
+ interior()
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ #-------------------------------------------------------
+--------------------
+ #Main interface-
+ #row -1
+ 
+ 
+ mainint=Toplevel(window)
+ mainint.title('Rolex - House Rentals')
+ mainint.resizable(height='false',width='false')
+ w=735
+ h=500
+ sw=mainint.winfo_screenwidth()
+ sh=mainint.winfo_screenheight()
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ mainint.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ mainint.config(bg='black')
+ space('sp',mainint,0,0,18,'black')
+ space('sq',mainint,0,1,20,'black')
+ 
+mainlogo=Label(mainint,image=newpic,borderwidth=0,bg='black')
+ mainlogo.grid(row=0,column=2,pady=5)
+ def loginbtnmain():
+ 
+loginbtn=Menubutton(mainint,text='',image=newlogin,borderwidth=0
+,bg='black')
+ loginbtn.menu=Menu(loginbtn,tearoff=0)
+ loginbtn['menu']=loginbtn.menu
+ loginbtn.menu.add_command(label=user)
+ loginbtn.menu.add_command(label='Switch 
+account')#command pending
+ loginbtn.menu.add_separator()
+ loginbtn.menu.add_command(label='Host your 
+home')#command pending
+ loginbtn.menu.add_command(label='Feedback')
+ loginbtn.menu.add_command(label='Help')
+ 
+loginbtn.menu.add_command(label='Exit',command=window.destroy)
+ loginbtn.grid(row=0,column=3)
+ loginbtnmain()
+ 
+ space('rs1',mainint,1,0,18,'black')
+ mtyspace1=Label(mainint,text='Check-in Date 
+:',bg='black',fg='white',font=fontt('font2','Helvetica','18'))
+ mtyspace1.grid(row=1,column=1)
+ 
+ indate=StringVar()
+ 
+dentry=DateEntry(mainint,date_pattern='dd/mm/yyyy',width=30,text
+variable=indate)
+ dentry.configure(state='readonly')
+ dentry.grid(row=1,column=2,padx=5,pady=10)
+ space('rs1',mainint,2,0,18,'black')
+ mtyspace2=Label(mainint,text='Check-out Date 
+:',bg='black',fg='white',font=fontt('font2','Helvetica','18'))
+ mtyspace2.grid(row=2,column=1)
+ outdate=StringVar()
+ 
+dentry2=DateEntry(mainint,date_pattern='dd/mm/yyyy',width=30,tex
+tvariable=outdate)
+ dentry2.configure(state='readonly')
+ dentry2.grid(row=2,column=2,padx=5,pady=10)
+ 
+ space('rs1',mainint,3,0,18,'black')
+ loclab=Label(mainint,text='Select State 
+:',bg='black',fg='white',font=fontt('font3','Helvectica','18'))
+ loclab.grid(row=3,column=1)
+ a=combost(mainint)
+ space('rs1',mainint,4,0,18,'black')
+ loclab2=Label(mainint,text='Select City 
+:',bg='black',fg='white',font=fontt('font3','Helvectica','18'))
+ loclab2.grid(row=4,column=1)
+ b3=cityst(mainint,a)
+ 
+ space('rs1',mainint,5,0,18,'black')
+ prange=Label(mainint,text='Prize range 
+:',bg='black',fg='white',font=fontt('font3','Helvectica','18'))
+ prange.grid(row=5,column=1)
+ c3=prize(mainint)
+ 
+ 
+ space('rs1',mainint,6,0,18,'black')
+ members=Label(mainint,text='Members 
+:',bg='black',fg='white',font=fontt('font3','Helvectica','18'))
+ members.grid(row=6,column=1)
+ memberent=ttk.Combobox(mainint,width=30)
+ memberent.grid(row=6,column=2)
+ memberent.config(state='readonly')
+ tt=1
+ for i in range(5):
+ 
+memberent['values']=tuple(list(memberent['values'])+[str(tt)])
+ tt+=1
+ 
+subb=Button(mainint,image=subnew,font=fontm,bg='black',borderwid
+th=0,height=60,width=130,pady=10,command=pay)
+ subb.grid(row=7,column=2)
+ 
+#---------------------------------------------------------------
+-------------- 
+ 
+ def login():
+ mainlogo.destroy()
+ loginbtn.destroy()
+ signbtn.destroy()
+ exitbtn.destroy()
+ helpbtn.destroy()
+ w=500
+ h=340
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ window.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ 
+ def forgot():
+ def forgotback():
+ lb7.destroy()
+ txt7.destroy()
+ subbtn7.destroy()
+ backbn.destroy()
+ login()
+ 
+ def resetpass():
+ def otpsigndestroy():
+ txtt33.destroy()
+ otpent.destroy()
+ subbn1.destroy()
+ backb3.destroy()
+ forgot()
+ def fcheck():
+ def passcheck():
+ uc=False
+ lc=False
+ num=False
+ sp=False
+ pc=False
+ password=txt7.get()
+ for a in password:
+ if a.islower():
+ lc=True
+ if a.isupper():
+ uc=True
+ if a.isdigit():
+ num=True
+ if a.isspace():
+ 
+messagebox.showerror('Note','Your password must not have space')
+ clear()
+ if a in '''`'!@#$%^&*()-
+_+={}[]|\;:"<>,./?''':
+ sp=True
+ if uc and lc and num and sp:
+ if len(password)<8 or 
+len(password)>16:
+ messagebox.showerror('Note','The 
+length of the password must be above 8 and below 15 characters')
+ clear()
+ else:
+ global user
+ cursor.execute('''update 
+logindetails set password='%s' where mailid='%s' 
+'''%(password,user))
+ db.commit()
+messagebox.showinfo('Note','Password Updated')
+ txt7.delete(0,END)
+maininterface()
+ 
+ else:
+ messagebox.showwarning('Note','Check 
+your password')
+ txt2.delete(0,END)
+ txt3.delete(0,END)
+ 
+ if otpent.get()==str(b):
+ txtt33.destroy()
+ otpent.destroy()
+ subbn1.destroy()
+ backb3.destroy()
+ 
+window.geometry('%dx%d+%d+%d'%(500,200,x,y))
+ lb7=Label(window,text='Create New 
+password :',font=fontm,bg='black',fg='white')
+ lb7.pack(pady=10)
+ txt7=Entry(window,width=30,show='*')
+ txt7.pack(pady=10)
+ 
+subbtn7=Button(window,image=subnew,font=fontm,bg='black',borderw
+idth=0,height=60,width=130,command=passcheck)
+ subbtn7.pack()
+ 
+ else:
+ messagebox.showerror('Note','Check your 
+OTP')
+ otpent.delete(0,END)
+ cursor.execute('''select * from logindetails''')
+ row=cursor.fetchall()
+ userid=txt7.get()
+ b=random.randrange(1000,9999)
+ for c in row:
+ if c[0] in userid:
+ global user
+ user=userid
+ def forgotdestroy():
+ lb7.destroy()
+ txt7.destroy()
+ subbtn7.destroy()
+ backbn.destroy()
+ forgotdestroy()
+ otp(userid,str(b))
+ 
+window.geometry('%dx%d+%d+%d'%(500,300,x,y))
+ 
+ txtt33=Label(window,text='Enter OTP 
+:',font=fontm,bg='black',fg='white',pady=10)
+ txtt33.pack()
+ 
+ otpent=Entry(window,width=30,show='*')
+ otpent.pack()
+ 
+ 
+subbn1=Button(window,image=subnew,font=fontm,bg='black',borderwi
+dth=0,height=60,width=130,command=fcheck)
+ subbn1.pack(pady=10)
+ 
+backb3=Button(window,image=newbackbtn,borderwidth=0,bg='black',c
+ommand=otpsigndestroy)
+ backb3.pack()
+ messagebox.showinfo('Note','Otp has been 
+sent!')
+ break
+ 
+ else:
+ messagebox.showerror('Note',"This Gmail 
+id isn't registered yet!")
+ txt7.delete(0,END)
+ break
+ 
+ mainlogo1.destroy()
+ lb2.destroy()
+ txt1.destroy()
+ lb3.destroy()
+ txt2.destroy()
+ subbtn1.destroy()
+ subbtn2.destroy()
+ backb.destroy()
+ window.geometry('%dx%d+%d+%d'%(500,200,x,y))
+ lb7=Label(window,text='Enter your Gmail id 
+:',font=fontm,bg='black',fg='white')
+ lb7.pack(pady=10)
+ txt7=Entry(window,width=30)
+ txt7.pack(pady=10)
+ 
+subbtn7=Button(window,image=subnew,font=fontm,bg='black',borderw
+idth=0,height=60,width=130,command=resetpass)
+ subbtn7.pack()
+ 
+backbn=Button(window,image=newbackbtn,borderwidth=0,bg='black',c
+ommand=forgotback)
+ backbn.pack()
+ 
+ 
+ 
+ 
+ 
+ 
+ def clear():
+ txt1.delete(0,END)
+ txt2.delete(0,END)
+ def logback():
+ mainlogo1.destroy()
+ lb2.destroy()
+ txt1.destroy()
+ lb3.destroy()
+ txt2.destroy()
+ subbtn1.destroy()
+ subbtn2.destroy()
+ backb.destroy()
+ window.geometry('%dx%d+%d+%d'%(500,400,x,y))
+ maintab()
+ def logmainz():
+ 
+ checkvar=False
+ cursor.execute('''select * from logindetails''')
+ row=cursor.fetchall()
+ userid=txt1.get()
+ password=txt2.get()
+ b=random.randrange(1000,9999)
+ 
+ for c in row:
+ if c[0] in userid and c[1] in password:
+ checkvar=True
+ global user
+ user = c[0]
+ messagebox.showinfo('Note','Logged in!')
+ maininterface()
+ break 
+ else:
+ messagebox.showerror('Note','Check your 
+userid and password')
+ clear()
+ break
+ 
+ 
+mainlogo1=Label(window,image=newpic,borderwidth=0,bg='black',pad
+y=20)
+ mainlogo1.grid(row=0,column=1)
+ lb2=Label(window,text='Gmail id 
+:',font=fontm,bg='black',fg='white')
+ lb2.grid(row=1,column=0,pady=5)
+ txt1=Entry(window,width=30)
+ txt1.grid(row=1,column=1,padx=5)
+ lb3=Label(window,text='password 
+:',font=fontm,bg='black',fg='white')
+ lb3.grid(row=2,column=0,pady=5)
+ txt2=Entry(window,width=30,show='*')
+ txt2.grid(row=2,column=1,padx=5)
+ 
+subbtn1=Button(window,image=subnew,font=fontm,bg='black',borderw
+idth=0,command=logmainz,height=60,width=130)
+ subbtn1.grid(row=4,column=1,sticky=W,pady=10)
+ 
+subbtn2=Button(window,image=forgotnew,font=fontm,bg='black',bord
+erwidth=0,height=60,width=130,command=forgot)
+ subbtn2.grid(row=4,column=1,sticky=E,pady=10)
+ 
+backb=Button(window,image=newbackbtn,borderwidth=0,bg='black',co
+mmand=logback)
+ backb.grid(row=5,column=1)
+ 
+ def signup():
+ mainlogo.destroy()
+ loginbtn.destroy()
+ signbtn.destroy()
+ exitbtn.destroy()
+ helpbtn.destroy()
+ w=400
+ h=375
+ x=(sw/2)-(w/2)
+ y=(sh/2)-(h/2)
+ window.geometry('%dx%d+%d+%d'%(w,h,x,y))
+ def clear():
+ txt1.delete(0,END)
+ txt2.delete(0,END)
+ txt3.delete(0,END)
+ def signback():
+ mainlogo1.destroy()
+ lb2.destroy()
+ txt1.destroy()
+ lb3.destroy()
+ txt2.destroy()
+ lb4.destroy()
+ txt3.destroy()
+ subbtn1.destroy()
+ backb.destroy()
+ window.geometry('%dx%d+%d+%d'%(500,400,x,y))
+ maintab()
+ def signmainz():
+ def fcheck():
+ if otpent.get()==str(b):
+ messagebox.showinfo('Note','Signed up!')
+ maininterface()
+ else:
+ messagebox.showerror('Note','Check your 
+OTP')
+ otpent.delete(0,END)
+ uc=False
+ lc=False
+ num=False
+ sp=False
+ pc=False
+ b=random.randrange(1000,9999)
+ userid=txt1.get()
+ password=txt2.get()
+ cpass=txt3.get()
+ for a in password:
+ if a.islower():
+ lc=True
+ if a.isupper():
+ uc=True
+ if a.isdigit():
+ num=True
+ if a.isspace():
+ messagebox.showerror('Note','Your password 
+must not have space')
+ clear()
+ if a in '''`'!@#$%^&*()-_+={}[]|\;:"<>,./?''':
+ sp=True
+ if uc and lc and num and sp:
+ if len(password)<8 or len(password)>16:
+ messagebox.showerror('Note','The length of 
+the password must be above 8 and below 15 characters')
+ clear()
+ elif password!=cpass:
+ messagebox.showinfo('Note',"Password doesn't 
+match")
+ clear() 
+ else:
+ i2=database(userid,password)
+ if i2==0:
+ messagebox.showerror('Notice','user 
+already exists')
+ clear()
+ else:
+ pc=True
+ global user
+ user=userid
+ #messagebox.showinfo('Note','Signed 
+up!')
+ #window.destroy()
+ else:
+ messagebox.showwarning('Note','Check your 
+password')
+ txt2.delete(0,END)
+ txt3.delete(0,END)
+ if pc==True:
+ otp(userid,str(b))
+ def otpsigndestroy():
+ txtt33.destroy()
+ otpent.destroy()
+ subbn1.destroy()
+ backb3.destroy()
+ signup()
+ mainlogo1.destroy()
+ lb2.destroy()
+ txt1.destroy()
+ lb3.destroy()
+ txt2.destroy()
+ lb4.destroy()
+ txt3.destroy()
+ subbtn1.destroy()
+ backb.destroy()
+ window.geometry('%dx%d+%d+%d'%(500,300,x,y))
+ 
+ txtt33=Label(window,text='Enter OTP 
+:',font=fontm,bg='black',fg='white',pady=10)
+ txtt33.pack()
+ 
+ otpent=Entry(window,width=30,show='*')
+ otpent.pack()
+ 
+ 
+subbn1=Button(window,image=subnew,font=fontm,bg='black',borderwi
+dth=0,height=60,width=130,command=fcheck)
+ subbn1.pack(pady=10)
+ 
+backb3=Button(window,image=newbackbtn,borderwidth=0,bg='black',c
+ommand=otpsigndestroy)
+ backb3.pack()
+ messagebox.showinfo('Note','Otp has been sent!')
+ 
+ 
+ 
+ 
+mainlogo1=Label(window,image=newpic,borderwidth=0,bg='black',pad
+y=20)
+ mainlogo1.grid(columnspan=2)
+ lb2=Label(window,text='Mail id 
+:',font=fontm,fg='white',bg='black')
+ lb2.grid(row=1,column=0,pady=5)
+ txt1=Entry(window,width=30)
+ txt1.grid(row=1,column=1,padx=5)
+ lb3=Label(window,text='Create a password 
+:',font=fontm,fg='white',bg='black')
+ lb3.grid(row=2,column=0,pady=5)
+ txt2=Entry(window,width=30,show='*')
+ txt2.grid(row=2,column=1,padx=5)
+ 
+ lb4=Label(window,text='Re-enter password 
+:',font=fontm,fg='white',bg='black')
+ lb4.grid(row=3,column=0,pady=5)
+ txt3=Entry(window,width=30,show='*')
+ txt3.grid(row=3,column=1,padx=5)
+ 
+subbtn1=Button(window,image=subnew,font=fontm,bg='black',borderw
+idth=0,command=signmainz,height=60,width=130)
+ subbtn1.grid(columnspan=2)
+ 
+ 
+backb=Button(window,image=newbackbtn,borderwidth=0,bg='black',co
+mmand=signback)
+ backb.grid(columnspan=2)
+ #-----------------------------------------------------------
+--------------------------------------------
+ 
+mainlogo=Label(window,image=newpic,borderwidth=0,bg='black',pady
+=20)
+ mainlogo.pack()
+ 
+loginbtn=Button(window,image=newlogintext,borderwidth=0,bg='blac
+k',height=60,width=130,command=login)
+ loginbtn.pack()
+ 
+signbtn=Button(window,image=newsigntext,borderwidth=0,bg='black'
+,height=60,width=130,command=signup)
+ signbtn.pack()
+ 
+exitbtn=Button(window,image=exitnew,borderwidth=0,bg='black',hei
+ght=60,width=130,command=window.destroy)
+ exitbtn.pack()
+ 
+helpbtn=Button(window,image=helpnew,borderwidth=0,bg='white',hei
+ght=60,width=200,command=terms)
+ helpbtn.pack()
+ #-----------------------------------------------------------
+-------------------------------------------
+num1_1,num1_2,num1_3,num1_4,num1_5=1,1,1,1,1
+num2_1,num2_2,num2_3,num2_4,num2_5=1,1,1,1,1
+num3_1,num3_2,num3_3,num3_4,num3_5=1,1,1,1,1
+dic={11:num1_1,12:num1_2,13:num1_3,14:num1_4,15:num1_5,
+ 21:num2_1,22:num2_2,23:num2_3,24:num2_4,25:num2_5,
+ 31:num3_1,32:num3_2,33:num3_3,34:num3_4,35:num3_5}
+dic2={11:num1_1,12:num1_2,13:num1_3,14:num1_4,15:num1_5,
+ 21:num2_1,22:num2_2,23:num2_3,24:num2_4,25:num2_5,
+ 31:num3_1,32:num3_2,33:num3_3,34:num3_4,35:num3_5}
+house_names=[]
+owner_names=[]
+owner_mail_ids=[]
+owner_num=[]
+owner_address=[]
+owner_lattitude=[]
+owner_longitude=[]
+num1=1
+num2=3
+state=''
+maintab() 
+window.mainloop()
